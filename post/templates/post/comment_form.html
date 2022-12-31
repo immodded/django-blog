@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-6">Post your comment for: <a href="{% url 'post-detail' post.pk %}">{{post.title}}</a></h1>
+<form action="" method="post">
+    {% csrf_token %}
+    <table class="table">
+        <tr>
+            {% comment %} <td class="col">{{ form.description.label_tag }}</td> {% endcomment %}
+            <td class="col">{{ form.description }}</td>
+        </tr>
+    </table>
+    <div class="col"><input type="submit" value="Submit" class="btn btn-success"/>
+        <a href="{% url 'post-detail' post.pk %}" class="btn btn-danger"><i class="fa-solid fa-ban"></i></a></div>
+</form>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h3>Create Post</h3>
+<form class=" form-group " action="" method="post">
+    {% csrf_token %}
+    <table class="table">
+        <tr>
+            <td class="col">{{ form.title.label_tag }}</td>
+            <td class="col">{{ form.title }}</td>
+        </tr>
+        <tr>
+            <td class="col">{{ form.body.label_tag }}</td>
+            <td class="col">{{ form.body }}</td>
+        </tr>
+    </table>
+    <div class="col"><input type="submit" class="btn btn-dark" value="Submit">
+        <a href="{% url 'posts' %}" class="btn btn-danger"><i class="fa-solid fa-ban"></i></a>
+    </div>
+
+</form>
+{% endblock %}

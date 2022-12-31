@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1 class="display-6">Delete post</h1>
+
+<p class="note note-danger mx-4 my-4 text-break">Are you sure you want to delete the post: {{ post.title }}?</p>
+
+<form action="" method="POST">
+  {% csrf_token %}
+  <input type="submit" action="" value="Yes, delete." class="btn btn-danger">
+ <a href="{{ post.get_absolute_url }}" class="btn btn-success ">Cancel</a>
+</form>
+
+{% endblock %}

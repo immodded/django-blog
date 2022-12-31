@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1 class="display-6">Login</h1>
+{% if form.errors %}
+<div class="note note-danger mb-3">
+    <ul>
+        {% for field in form %}
+        {% for error in field.errors %}
+        <li>{% if field != '__all__' %}
+            <strong>{{ field.label }}</strong>
+            {% endif %}
+            {{ error }}
+        </li>
+        {% endfor %}
+        {% endfor %}
+    </ul>
+    <p>User error! Try again or contact Admin.</p>
+</div>
+{% endif %}
+
+<form method="post" action="{% url 'login' %}">
+    {% csrf_token %}
+    <table class="table">
+        <tr>
+            <td class="col">{{ form.username.label_tag }}</td>
+            <td class="col">{{ form.username }}</td>
+        </tr>
+        <tr>
+            <td class="col">{{ form.password.label_tag }}</td>
+            <td class="col">{{ form.password }}</td>
+        </tr>
+        <tr>
+            <td>
+                <input type="submit" value="login" class="btn btn-success">
+            </td>
+
+        </tr>
+    </table>
+
+    <input type="hidden" name="next" value="{{ next }}">
+</form>
+
+
+{% endblock %}

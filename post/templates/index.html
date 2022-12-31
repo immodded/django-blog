@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="note note-success mb-3">
+Welcome! <strong>{{ user.first_name }} {{ user.last_name }}</strong>, Confess or share some secrets anonymously.
+</div>
+{% else %}
+<div class="note note-danger mb-3">
+Login required for access to site!
+<a href="{% url 'login' %}" class="btn btn-primary btn-sm">Login</a>
+<a href="{% url 'signup' %}" class="btn btn-success btn-sm">signup</a>
+</div>
+{% endif %}
+<div class="row mx-3">
+    <div class="col-sm-3 card text-center bg-info text-white mx-2 my-2 py-2">
+        <h3>Post{{ num_posts|pluralize }}</h3>
+        <h3 class="display-6 ">{{ num_posts }}</h3>
+    </div>
+    <div class="col-sm-3 card text-center bg-success text-white mx-2 my-2 py-2">
+        <h3>Visit{{ num_visits|pluralize }}</h3>
+        <h3 class="display-6  ">{{ num_visits }}</h3>
+    </div>
+    <div class="col-sm-3 card text-center bg-secondary text-white mx-2 my-2 py-2">
+        <h3>User{{ num_users|pluralize }}</h3>
+        <h3 class="display-6  ">{{ num_users }}</h3>
+    </div>
+</div>
+{% endblock %}

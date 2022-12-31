@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  {% block title %}<title>Confessions</title>{% endblock %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- MDB -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.css" rel="stylesheet" />
+  <!-- MDB -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.1/mdb.min.js"></script>
+  <!-- Latest compiled JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Add additional CSS in static file -->
+  {% load static %}
+  <script src="{% static 'js/script.js' %}"></script>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+
+<body>
+
+  <header>
+    <!-- Sidebar -->
+    <nav id="sidebarMenu" class="collapse d-lg-block sidebar collapse bg-white">
+      <div class="position-sticky">
+        <div class="list-group list-group-flush mx-3 mt-4">
+          {% if user.is_authenticated %}
+          <a href="{% url 'profile' %}" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-user fa-fw me-3"></i><span>{{ user.username }}</span></a>
+          {% endif %}
+          <a href="{% url 'index' %}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="fas fa-house-user fa-fw me-3"></i><span>Home</span>
+          </a>
+          <a href="{% url 'posts' %}" class="list-group-item list-group-item-action py-2 ripple"><i
+              class="fas fa-envelopes-bulk fa-fw me-3"></i><span>All Posts</span></a>
+          {% if user.is_authenticated %}
+          <a href="{% url 'post-create' %}" class="list-group-item list-group-item-action py-2 ripple"><i
+              class="fas fa-square-plus fa-fw me-3"></i><span>Create Post</span></a>
+          <a href="{% url 'logout'%}?next={{request.path}}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="fas fa-right-from-bracket fa-fw me-3"></i><span>Log out</span></a>
+          {% else %}
+          <a href="{% url 'login'%}?next={{request.path}}" class="list-group-item list-group-item-action py-2 ripple">
+            <i class="fas fa-right-to-bracket fa-fw me-3"></i><span>Log In</span></a>
+          <a href="{% url 'signup'%}?next={{request.path}}"
+            class="list-group-item list-group-item-action py-2 ripple"><i
+              class="fas fa-user-plus fa-fw me-3"></i><span>Sign up</span></a>
+          {% endif %}
+          <a href="http://immodded.github.io/portfolio" class="list-group-item list-group-item-action py-2 ripple"><i class="fas fa-lock fa-fw me-3"></i><span>Contact</span></a>
+        </div>
+      </div>
+    </nav>
+    <!-- Navbar -->
+    <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+      <!-- Container wrapper -->
+      <div class="container-fluid">
+        <!-- Toggle button -->
+        <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#sidebarMenu"
+          aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+          <i class="fas fa-bars"></i>
+        </button>
+
+        <!-- Brand -->
+        <h1 class="display-6">IMMODDED</h1>
+
+    </nav>
+    <!-- Navbar -->
+  </header>
+  <!--Main Navigation-->
+
+  <!--Main layout-->
+  <main style="margin-top: 58px">
+    <div class="container pt-4">
+      {% block content %}{% endblock %}
+
+      {% block pagination %}
+      {% if is_paginated %}
+      <ul class="pagination">
+
+        {% if page_obj.has_previous %}
+        <li class="page-item">
+          <a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+        <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.previous_page_number }}">
+            {{ page_obj.previous_page_number }}</a></li>
+        {% endif %}
+        <li class="page-item"><a class="page-link active" href="#">{{ page_obj.number }} </a></li>
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}">
+            {{ page_obj.next_page_number }}</a></li>
+        <li class="page-item">
+          <a class="page-link" href="{{ request.path }}?page={{ page_obj.next_page_number }}" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endblock %}
+    </div>
+  </main>
+</body>
+
+</html>
