@@ -1,12 +1,12 @@
 # Django Blog
-<!-- ![](https:/screenshots/home]) -->
+![](https://github.com/immodded/django-blog/blob/master/screenshots/home.PNG)
 ### steps for runnig server
-1. ``` pip install -r requirements.txt```
+1. ``` pip install -r requirements.txt ```
 2. ``` python manage.py collectstatic ```
-3. ``` python manage.py makemigrations```
-4. ``` python manage.py migrate```
-5. ```pytthon manage.py createsuperuser```
-6. ```python manage.py runserver```
+3. ``` python manage.py makemigrations ```
+4. ``` python manage.py migrate ```
+5. ``` pytthon manage.py createsuperuser ```
+6. ``` python manage.py runserver ```
 
 
 ### Functionalities
