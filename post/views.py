@@ -20,12 +20,12 @@ def index(request):
     return render(request, 'index.html' , context )
 
 
-class PostlistView(LoginRequiredMixin,generic.ListView):
+class PostlistView(generic.ListView):
     model = Post
     paginate_by = 10
     ordering = ['-date']
 
-class PostDetailView(LoginRequiredMixin,generic.DetailView):
+class PostDetailView(generic.DetailView):
     model = Post
 
 
