@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "post.apps.PostConfig",
     "accounts.apps.AccountsConfig",
+    "django_bootstrap5",
 ]
 
 
@@ -134,3 +135,6 @@ DATABASES['default'].update(db_from_env)
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+
+LOGIN_REDIRECT_URL="/"

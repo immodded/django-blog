@@ -1,21 +1,38 @@
 from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
-
+from django.utils.text import slugify
 from django.urls import reverse
-
+import random 
+import string
 class Post(models.Model):
     title = models.CharField(max_length=200,)
     body = models.TextField(max_length = None,)
     date = models.DateTimeField(auto_now_add=True)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,)
+    slug = models.SlugField(unique=True, null=True, blank=True)
 
     class Meta:
         ordering = ['title', 'user']
 
     def get_absolute_url(self):
-        return reverse('post-detail', args=[str(self.id)])
+        return reverse('post-detail', kwargs={'slug': self.slug})
     
+    def generate_unique_slug(self):
+        slug = slugify(self.title)
+        unique_slug=slug
+        count=1
+        while Post.objects.filter(slug=unique_slug).exists():
+            random_chars = "".join(random.choices(string.ascii_lowercase + string.digits, k=4))
+            unique_slug = f"{slug}-{random_chars}-{count}"
+            count += 1
+        return unique_slug
+
+    def save(self,*args, **kwargs):
+        if not self.slug:
+            self.slug = self.generate_unique_slug()
+        super().save(*args, **kwargs)
+        
     def __Str__(self):
         return self.title
 

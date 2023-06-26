@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Post, Comment, Reply
 from django.contrib.auth.models import User
 from django.views import generic
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin,UserPassesTestMixin
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -42,9 +42,14 @@ class PostUpdate(LoginRequiredMixin,UpdateView):
     fields = ['title', 'body',]
 
 
-class PostDelete(LoginRequiredMixin,DeleteView):
+class PostDelete(UserPassesTestMixin,DeleteView):
     model = Post
     success_url = reverse_lazy('posts')
+
+    def test_func(self):
+        post = self.get_object()
+        user = self.request.user
+        return user.is_superuser or user == post.user
 
 
 
@@ -62,7 +67,7 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         # Call the base implementation first to get a context
         context = super(CommentCreate, self).get_context_data(**kwargs)
         # Get the blog from id and add it to the context
-        context['post'] = get_object_or_404(Post, pk = self.kwargs['pk'])
+        context['post'] = get_object_or_404(Post, slug = self.kwargs['slug'])
         return context
         
     def form_valid(self, form):
@@ -72,7 +77,7 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         #Add logged-in user as author of comment
         form.instance.author = self.request.user
         #Associate comment with blog based on passed id
-        form.instance.post=get_object_or_404(Post, pk = self.kwargs['pk'])
+        form.instance.post=get_object_or_404(Post, slug = self.kwargs['slug'])
         # Call super-class form validation behaviour
         return super(CommentCreate, self).form_valid(form)
 
@@ -80,7 +85,7 @@ class CommentCreate(LoginRequiredMixin, CreateView):
         """
         After posting comment return to associated blog.
         """
-        return reverse('post-detail', kwargs={'pk': self.kwargs['pk'],})
+        return reverse('post-detail', kwargs={'slug': self.kwargs['slug'],})
 
 
 

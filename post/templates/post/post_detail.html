@@ -3,46 +3,55 @@
 {% block content %}
 <h1 class="display-6 text-break text-decoration-underline text-center">{{ post.title }}</h1>
 <hr class="hr hr-blurry" />
-<div>
-  <button class="btn btn-secondary btn-sm"><i class="fa-solid fa-calendar-days"></i> {{post.date}}</button>
-{% if user.is_authenticated %}
-{% if user.id == post.user.id %}
-<a href="{% url 'post-update' post.id %}" class="btn btn-secondary btn-sm "><i class="fa-solid fa-pen-to-square"></i></a>
-<a href="{% url 'post-delete' post.id %}" class="btn btn-danger btn-sm "><i class="fa-solid fa-trash"></i></a>
-{% endif %} 
-{% endif %}
-  <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i
-      class="fa-brands fa-whatsapp fa-lg"></i></a>
-  <a href="https://facebook.com/share.php?u={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i
-      class="fa-brands fa-facebook"></i></a>
-  <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i
-      class="fa-brands fa-twitter fa-lg"></i></a>
+
+<div class="d-flex justify-content-start align-items-center mb-3">
+  <button class=" mx-3 btn btn-secondary btn-sm"><i class="fa-solid fa-calendar-days"></i> {{ post.date }}</button>
+  {% if user.is_authenticated %}
+    {% if user.id == post.user.id or user.is_superuser %}
+      <a href="{% url 'post-update' post.slug %}" class="btn btn-secondary btn-sm "><i class="fa-solid fa-pen-to-square"></i></a>
+      <a href="{% url 'post-delete' post.slug %}" class="btn btn-danger btn-sm "><i class="fa-solid fa-trash"></i></a>
+    {% endif %}
+  {% endif %}
+  <a href="https://api.whatsapp.com/send?text={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i class="fa-brands fa-whatsapp fa-lg"></i></a>
+  <a href="https://facebook.com/share.php?u={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i class="fa-brands fa-facebook"></i></a>
+  <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" class="btn btn-dark btn-sm"><i class="fa-brands fa-twitter fa-lg"></i></a>
 </div>
-<div class="note mx-4 my-4 text-break note-success"> {{ post.body }}</div>
-<div class="d-flex justify-content-start m-1">
-<h4 class=""><i class="fa-solid fa-comments"></i> Comments</h4>
-<a href="#commentbox" class="text-success"><i class="fa-solid fa-pen-to-square fa-lg m-1"></i></a>
+
+<div class="card my-4">
+  <div class="card-body">
+    <p class="card-text">{{ post.body }}</p>
+  </div>
 </div>
-<ul class="list-group list-group-light " style="height: 65vh; overflow-y: scroll;">
+
+<div class="d-flex justify-content-start align-items-center mb-3">
+  <h4 class="me-3"><i class="fa-solid fa-comments"></i> Comments</h4>
+  <a href="#commentbox" class="text-success"><i class="fa-solid fa-pen-to-square fa-lg m-1"></i></a>
+</div>
+
+<ul class="list-group list-group-flush" style="height: 65vh; overflow-y: auto;">
   {% for comment in post.comment_set.all %}
-  <li class="list-group-item d-flex justify-content-between align-items-start shadow-5 m-2">
-    <div class="ms-2 me-auto">
-      <div class="d-flex justify-content-between m-1">
-        <div class="btn btn-secondary btn-sm mx-3"><i class="fas fa-user me-1"></i> {{comment.author}}</div>
-        <div class="text-muted">{{comment.post_date}}</div>
+    <li class="list-group-item d-flex justify-content-between align-items-start shadow-sm m-2">
+      <div class="card my-2">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <div class="btn btn-secondary btn-sm mx-3"><i class="fas fa-user me-1"></i> {{ comment.author }}</div>
+            <div class="text-muted">({{ comment.post_date }})</div>
+          </div>
+          <p class="card-text mx-3 my-2 text-break">{{ comment.description }}</p>
+          <a href="{{ comment.get_absolute_url }}" class="btn btn-primary btn-sm ms-1">Reply{{ comment.reply_set.count|pluralize }} [{{ comment.reply_set.count }}]</a>
+        </div>
       </div>
-      <p class="text-break text-primary mx-3 my-2">{{comment.description}}</p>
-      <a href="{{ comment.get_absolute_url }}" class="btn btn-primary btn-sm ms-1">reply</a>
-    </div>
-  </li>
+    </li>
   {% endfor %}
 </ul>
-<div class="m-3" id="commentbox">
+
+
+<div class="d-flex justify-content-start align-items-center m-4" id="commentbox">
   {% if user.is_authenticated %}
-  <a href="{% url 'post-comment' post.id %}" class="btn btn-success btn-sm ">Add a new comment</a>
+    <a href="{% url 'post-comment' post.slug %}" class="btn btn-success btn-sm">Add a new comment</a>
   {% else %}
-  <a href="{% url 'login'%}?next={{request.path}}" class="btn btn-success btn-sm ">Login to add a new comment</a>
+    <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-success btn-sm">Login to add a new comment</a>
   {% endif %}
-  <a href="{% url 'posts' %}" class="btn btn-danger btn-sm"><i class="fa-solid fa-ban"></i></a>
+  <a href="{% url 'posts' %}" class="mx-3 btn btn-danger btn-sm"><i class="fa-solid fa-ban"></i></a>
 </div>
 {% endblock %}

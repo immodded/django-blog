@@ -1,24 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
-<h1 class="display-6">Profile</h1>
-<table class="table">
-    <tr>
-        <td class="col">Name: </td>
-        <td class="col">{{ user.first_name }} {{ user.last_name }}</td>
-    </tr>
-    <tr>
-        <td class="col">Username: </td>
-        <td class="col">{{ user.username }}</td>
-    </tr>
-    <tr>
-        <td class="col">Email: </td>
-        <td class="col">{{ user.email }}</td>
-    </tr>
-    <tr>
-        <td class="col">Posts:</td>
-        <td class="col">{{ user_posts }}</td>
-    </tr>
-</table>
+<div class="card">
+    <div class="card-body">
+      <h5 class="card-title">User Profile</h5>
+      <table class="table">
+        <tr>
+          <td class="fw-bold">Name:</td>
+          <td>{{ user.first_name }} {{ user.last_name }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Username:</td>
+          <td>{{ user.username }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Email:</td>
+          <td>{{ user.email }}</td>
+        </tr>
+        <tr>
+          <td class="fw-bold">Posts:</td>
+          <td>{{ user_posts }}</td>
+        </tr>
+      </table>
 <div class="col"><a href="{% url 'profile-update' %}" class="btn btn-success btn-sm"><i class="fa-solid fa-pen-to-square fa-lg m-1"></i>Update Profile</a> <a
     href="{% url 'index' %}" class="btn btn-danger btn-sm"><i class="fa-solid fa-xmark fa-lg m-1"></i>Close</a></div>
+    </div>
+  </div>
+  
 {% endblock %}

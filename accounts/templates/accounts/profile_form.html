@@ -1,48 +1,16 @@
 {% extends "base.html" %}
+{% load django_bootstrap5 %}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
 
 {% block content %}
 <h3 class="disply-6">Profile</h3>
-{% if form.errors %}
-<div class="note note-danger mb-3">
-    <ul>
-        {% for field in form %}
-        {% for error in field.errors %}
-        <li>{% if field != '__all__' %}
-            <strong>{{ field.label }}</strong>
-            {% endif %}
-            {{ error }}
-        </li>
-        {% endfor %}
-        {% endfor %}
-    </ul>
-    <p>User error! Try again or contact Admin.</p>
-</div>
-{% endif %}
+
 <form action="{% url 'profile-update' %}" method="POST">
     {% csrf_token %}
-    <table class="table">
-        <tr>
-            <td class="col">{{ form.username.label_tag }}</td>
-            <td class="col">{{ form.username }}</td>
-        </tr>
-        <tr>
-            <td class="col">{{ form.first_name.label_tag}}</td>
-            <td class="col">{{ form.first_name }}</td>
-        </tr>
-        <tr>
-            <td class="col">{{ form.last_name.label_tag}}</td>
-            <td class="col">{{ form.last_name }}</td>
-        </tr>
-        <tr>
-            <td class="col">{{ form.email.label_tag}}</td>
-            <td class="col">{{ form.email }}</td>
-        </tr>
-        <tr>
-            <td class="col"><a href="{% url 'password-update' %}" class="btn btn-success">Change Password</a>
-            </td>    
-        </tr>
-    </table>
-    <div class="m-3" ><input type="submit" value="Update" class="btn btn-success">
+    {% bootstrap_form form exclude=passwords %}
+    {% bootstrap_button button_type="submit" content="Save" %}
+    <a href="{% url 'password-update' %}" class="btn btn-success">Change Password</a>
     <a href="{% url 'index' %}" class="btn btn-secondary">Cancel</a></div>
 </form>
 

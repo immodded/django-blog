@@ -26,9 +26,10 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form':form})
 
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
-    form_class= ProfileUpdateForm
+    model = User
     template_name = 'accounts/profile_form.html'
     success_url = reverse_lazy('profile')
+    fields = ['username','first_name','last_name','email']
 
     def get_object(self):
         return self.request.user

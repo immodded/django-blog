@@ -1,33 +1,38 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="note note-success">
-        <div class="fw-bold">{{comment.author}} | ({{comment.post_date}})</div>
-        <p class="text-break">{{comment.description}}</p>
-    </div>
-<div class="d-flex justify-content-start">
-<h4 class="my-2"><i class="fa-solid fa-comments"></i> Reply</h4>
-<a href="#replybox" class="text-success"><i class="fa-solid fa-pen-to-square fa-lg m-1"></i></a>
+<div class="card mb-3">
+  <div class="card-body">
+    <div class="card-title fw-bold">{{ comment.author }} | ({{ comment.post_date }})</div>
+    <p class="card-text">{{ comment.description }}</p>
+  </div>
 </div>
-<ul class="list-group list-group-light" style="height: 65vh; overflow-y: scroll;">
-    {% for reply in comment.reply_set.all %}
-    <li class="list-group-item d-flex justify-content-between align-items-start shadow-5 m-2">
-      <div class="ms-2 me-auto">
-        <div class="d-flex justify-content-between m-1">
-          <div class="btn btn-secondary btn-sm mx-3"><i class="fas fa-user me-1"></i>{{reply.author}}</div>
-          <div class="text-muted">({{reply.post_date}})</div>
-        </div>
-        <p class="text-break text-primary mx-3 my-2">{{reply.description}}</p>
+
+<div class="d-flex justify-content-start align-items-center">
+  <h4 class="my-2 me-3"><i class="fa-solid fa-comments"></i> Reply</h4>
+  <a href="#replybox" class="text-success"><i class="fa-solid fa-pen-to-square fa-lg m-1"></i></a>
+</div>
+
+<ul class="list-group list-group-flush" style="height: 65vh; overflow-y: auto;">
+  {% for reply in comment.reply_set.all %}
+  <li class="list-group-item d-flex justify-content-between align-items-start shadow-sm m-2">
+    <div class="ms-2 me-auto">
+      <div class="d-flex justify-content-start m-1">
+        <div class="btn btn-secondary btn-sm mx-3"><i class="fas fa-user me-1"></i>{{ reply.author }}</div>
+        <div class="text-muted">({{ reply.post_date }})</div>
       </div>
-    </li>
-    {% endfor %}
+      <p class="card-text mx-3 my-2">{{ reply.description }}</p>
+    </div>
+  </li>
+  {% endfor %}
 </ul>
-<div class="mb-4 " id="replybox">
+
+<div class="d-flex justify-content-start align-items-center m-4" id="replybox">
   {% if user.is_authenticated %}
   <a href="{% url 'comment-reply' comment.id %}" class="btn btn-success btn-sm">Add a new Reply</a>
   {% else %}
-  <a href="{% url 'login'%}?next={{request.path}}"  class="btn btn-success btn-sm">Login to add a new reply</a>
+  <a href="{% url 'login' %}?next={{ request.path }}" class="btn btn-success btn-sm">Login to add a new reply</a>
   {% endif %}
-  <a href="{% url 'post-detail' comment.post.id %}" class="btn btn-danger btn-sm"><i class="fa-solid fa-ban"></i></a>
-  </div>
+  <a href="{% url 'post-detail' comment.post.slug %}" class="mx-3 btn btn-danger btn-sm"><i class="fa-solid fa-ban"></i></a>
+</div>
 {% endblock %}

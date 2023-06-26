@@ -2,11 +2,11 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-<div class="note note-success mb-3">
+<div class="alert alert-success mb-3">
 Welcome! <strong>{{ user.first_name }} {{ user.last_name }}</strong>
 </div>
 {% else %}
-<div class="note note-danger mb-3">
+<div class="alert alert-danger mb-3">
 Login required for access to site!
 <a href="{% url 'login' %}" class="btn btn-primary btn-sm">Login</a>
 <a href="{% url 'signup' %}" class="btn btn-success btn-sm">signup</a>
